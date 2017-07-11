@@ -29,16 +29,31 @@ class BeaconRagingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setUpViews()
+        self.setUpStateButtons()
         self.setUpBeaconRaging()
     }
     
-    private func setUpViews() {
+    private func setUpStateButtons() {
         switch self.ragingState {
         case .stop:
-            
+            self.setEnableStartRagingBtn()
         case .start:
+            self.setEnableStopRagingBtn()
         }
+    }
+    
+    private func setEnableStartRagingBtn() {
+        self.startRagingButton.isEnabled = true
+        self.startRagingButton.alpha = 1.0
+        self.stopRagingButton.isEnabled = false
+        self.stopRagingButton.alpha = 0.5
+    }
+    
+    private func setEnableStopRagingBtn() {
+        self.stopRagingButton.isEnabled = true
+        self.stopRagingButton.alpha = 1.0
+        self.startRagingButton.isEnabled = false
+        self.startRagingButton.alpha = 0.5
     }
     
     private func setUpBeaconRaging() {
@@ -53,10 +68,12 @@ class BeaconRagingViewController: UIViewController {
         self.region.notifyEntryStateOnDisplay = true
         self.coreLocationManager?.startMonitoring(for: self.region)
         self.coreLocationManager?.startRangingBeacons(in: self.region)
+        self.setEnableStopRagingBtn()
     }
 
     @IBAction func stopRagingClickedBtn(_ sender: UIButton) {
         self.coreLocationManager?.stopRangingBeacons(in: self.region)
+        self.setEnableStartRagingBtn()
     }
 }
 
